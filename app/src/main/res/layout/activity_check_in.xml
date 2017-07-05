@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.corpit.testnfc.Activity.CheckInActivity">
+
+    <include layout="@layout/layout_title_bar" />
+
+    <TextView
+        android:id="@+id/tv_customer_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_marginTop="30px"
+        android:textSize="30px"
+        android:layout_below="@+id/layout_titlebar"/>
+
+    <TextView
+        android:id="@+id/tv_customer_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_below="@+id/tv_customer_id"
+        android:layout_marginTop="30px"
+        android:textSize="30px"/>
+
+    <TextView
+        android:id="@+id/tv_customer_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:gravity="center"
+        android:layout_below="@+id/tv_customer_name"
+        android:layout_marginTop="30px"
+        android:textSize="30px"/>
+
+    <TextView
+        android:id="@+id/tv_count_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="700px"
+        android:textSize="20px"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/btn_view_list"
+        android:layout_width="400px"
+        android:layout_height="100px"
+        android:text="View Check In List"
+        android:layout_below="@+id/tv_count_number"
+        android:layout_marginTop="30px"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
