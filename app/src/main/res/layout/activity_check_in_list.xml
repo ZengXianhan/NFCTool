@@ -6,11 +6,24 @@
     android:layout_height="match_parent"
     tools:context="com.example.corpit.testnfc.Activity.CheckInListActivity">
 
+    <include layout="@layout/layout_title_bar" />
+
     <ListView
         android:id="@+id/lv_check_in_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btn_upload_data"
+        android:layout_below="@+id/layout_titlebar">
     </ListView>
+
+    <Button
+        android:id="@+id/btn_upload_data"
+        android:layout_width="match_parent"
+        android:layout_height="100px"
+        android:layout_alignParentBottom="true"
+        android:text="Upload Data"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:background="@color/slategray"/>
 
 </RelativeLayout>

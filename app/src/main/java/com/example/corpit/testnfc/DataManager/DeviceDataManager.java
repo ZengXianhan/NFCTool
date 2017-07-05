@@ -40,6 +40,68 @@ public class DeviceDataManager {
         return deviceList;
     }
 
+    public static String getDeviceId(SQLiteDatabase db, String name){
+        List<Device> list = new ArrayList<Device>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_DEVICE_NAME);
+        sql.append(" where deviceName = '");
+        sql.append(name);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    Device n = new Device();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.deviceName = (cursor.getString(cursor.getColumnIndex("deviceName")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        String id = "";
+        if (list.size()>0){
+            id = list.get(0).id;
+        }
+        return id;
+    }
+
+    public static String getDeviceName(SQLiteDatabase db, String id){
+        List<Device> list = new ArrayList<Device>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_DEVICE_NAME);
+        sql.append(" where id = '");
+        sql.append(id);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    Device n = new Device();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.deviceName = (cursor.getString(cursor.getColumnIndex("deviceName")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        String deviceName = "";
+        if (list.size()>0){
+            deviceName = list.get(0).deviceName;
+        }
+        return deviceName;
+    }
+
     public synchronized static void downloadDeviceData(SQLiteDatabase db){
         List<Device> deviceList = DummyData.getDeviceList();
         ContentValues cv = new ContentValues();

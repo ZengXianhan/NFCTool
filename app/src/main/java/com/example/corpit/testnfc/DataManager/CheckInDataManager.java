@@ -30,6 +30,9 @@ public class CheckInDataManager {
                     n.id = (cursor.getString(cursor.getColumnIndex("id")));
                     n.checkInTime = (cursor.getString(cursor.getColumnIndex("checkInTime")));
                     n.NFCNumber = (cursor.getString(cursor.getColumnIndex("NFCNumber")));
+                    n.checkInPointId = (cursor.getString(cursor.getColumnIndex("checkInPointId")));
+                    n.checkInTypeId = (cursor.getString(cursor.getColumnIndex("checkInTypeId")));
+                    n.checkInDeviceId = (cursor.getString(cursor.getColumnIndex("checkInDeviceId")));
                     checkInList.add(n);
                     cursor.moveToNext();
                 }
@@ -41,12 +44,12 @@ public class CheckInDataManager {
         return checkInList;
     }
 
-    public static List<CheckIn> getCheckIn(SQLiteDatabase db, String id){
+    public static List<CheckIn> getCheckIn(SQLiteDatabase db, String typeId){
         List<CheckIn> checkInList = new ArrayList<CheckIn>();
         StringBuffer sql = new StringBuffer();
         sql.append("select * from "+ DatabaseConstants.TABLE_CHECK_IN_NAME);
-        sql.append(" where id = '");
-        sql.append(id);
+        sql.append(" where checkInTypeId = '");
+        sql.append(typeId);
         sql.append("'");
         Cursor cursor = null;
         try {
@@ -58,6 +61,9 @@ public class CheckInDataManager {
                     n.id = (cursor.getString(cursor.getColumnIndex("id")));
                     n.checkInTime = (cursor.getString(cursor.getColumnIndex("checkInTime")));
                     n.NFCNumber = (cursor.getString(cursor.getColumnIndex("NFCNumber")));
+                    n.checkInPointId = (cursor.getString(cursor.getColumnIndex("checkInPointId")));
+                    n.checkInTypeId = (cursor.getString(cursor.getColumnIndex("checkInTypeId")));
+                    n.checkInDeviceId = (cursor.getString(cursor.getColumnIndex("checkInDeviceId")));
                     checkInList.add(n);
                     cursor.moveToNext();
                 }
@@ -69,12 +75,14 @@ public class CheckInDataManager {
         return checkInList;
     }
 
-    public static List<CheckIn> getCheckInByNFCNumber(SQLiteDatabase db, String NFCNumber){
+    public static List<CheckIn> getCheckInByNFCNumber(SQLiteDatabase db, String NFCNumber ,String type){
         List<CheckIn> checkInList = new ArrayList<CheckIn>();
         StringBuffer sql = new StringBuffer();
         sql.append("select * from "+ DatabaseConstants.TABLE_CHECK_IN_NAME);
         sql.append(" where NFCNumber = '");
         sql.append(NFCNumber);
+        sql.append("' and checkInTypeId = '");
+        sql.append(type);
         sql.append("'");
         Cursor cursor = null;
         try {
@@ -86,6 +94,9 @@ public class CheckInDataManager {
                     n.id = (cursor.getString(cursor.getColumnIndex("id")));
                     n.checkInTime = (cursor.getString(cursor.getColumnIndex("checkInTime")));
                     n.NFCNumber = (cursor.getString(cursor.getColumnIndex("NFCNumber")));
+                    n.checkInPointId = (cursor.getString(cursor.getColumnIndex("checkInPointId")));
+                    n.checkInTypeId = (cursor.getString(cursor.getColumnIndex("checkInTypeId")));
+                    n.checkInDeviceId = (cursor.getString(cursor.getColumnIndex("checkInDeviceId")));
                     checkInList.add(n);
                     cursor.moveToNext();
                 }
@@ -105,6 +116,9 @@ public class CheckInDataManager {
             cv.put("id",c.id);
             cv.put("checkInTime",c.checkInTime);
             cv.put("NFCNumber",c.NFCNumber);
+            cv.put("checkInPointId",c.checkInPointId);
+            cv.put("checkInTypeId",c.checkInTypeId);
+            cv.put("checkInDeviceId",c.checkInDeviceId);
             insertCheckIn(cv,db);
         }
     }

@@ -17,7 +17,9 @@ import android.widget.TextView;
 import com.example.corpit.testnfc.Data.AppPreference;
 import com.example.corpit.testnfc.Data.MyDatabaseHelper;
 import com.example.corpit.testnfc.DataManager.CheckInDataManager;
+import com.example.corpit.testnfc.DataManager.CheckInTypeDataManager;
 import com.example.corpit.testnfc.DataManager.CustomerDataManager;
+import com.example.corpit.testnfc.DataManager.DeviceDataManager;
 import com.example.corpit.testnfc.Model.CheckIn;
 import com.example.corpit.testnfc.Model.Customer;
 import com.example.corpit.testnfc.R;
@@ -36,9 +38,9 @@ public class CheckInActivity extends AutoLayoutActivity {
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
-    private TextView tv_customer_id,tv_customer_name,tv_customer_time,tv_count_number;
+    private TextView tv_customer_id, tv_customer_name, tv_customer_time, tv_count_number;
     private Button btn_view_list;
-    private TextView text_device_info,text_title;
+    private TextView text_device_info, text_title;
     private Button btn_logout;
 
     private String NFCNumber = new String("");
@@ -90,42 +92,42 @@ public class CheckInActivity extends AutoLayoutActivity {
     }
 
     private void initData() {
-        String title = AppPreference.getPref(getApplicationContext(),AppPreference.FEATURE);
+        String title = CheckInTypeDataManager.getCheckInTypeName(db, AppPreference.getPref(getApplicationContext(), AppPreference.CHECK_IN_TYPE)) ;
         text_title.setText(title);
-        String device = AppPreference.getPref(getApplicationContext(),AppPreference.DEVICE);
+        String device = DeviceDataManager.getDeviceName(db,AppPreference.getPref(getApplicationContext(), AppPreference.DEVICE));
         text_device_info.setText(device);
 
-        if (NFCNumber.length()<1){
+        if (NFCNumber.length() < 1) {
             tv_customer_id.setVisibility(View.INVISIBLE);
-        }else {
-            List<Customer> customers = CustomerDataManager.getCustomer(db,NFCNumber);
+        } else {
+            List<Customer> customers = CustomerDataManager.getCustomer(db, NFCNumber);
             String customerId = customers.get(0).id;
-            tv_customer_id.setText("Customer ID: "+ customerId);
+            tv_customer_id.setText("Customer ID: " + customerId);
             tv_customer_id.setVisibility(View.VISIBLE);
         }
 
-        if (customerName.length()<1){
+        if (customerName.length() < 1) {
             tv_customer_name.setVisibility(View.INVISIBLE);
-        }else {
-            tv_customer_name.setText("Customer Name: "+ customerName);
+        } else {
+            tv_customer_name.setText("Customer Name: " + customerName);
             tv_customer_name.setVisibility(View.VISIBLE);
         }
 
-        if (checkInTime.length()<1){
+        if (checkInTime.length() < 1) {
             tv_customer_time.setVisibility(View.INVISIBLE);
-        }else {
-            tv_customer_time.setText("Check in time: "+ checkInTime);
+        } else {
+            tv_customer_time.setText("Check in time: " + checkInTime);
             tv_customer_time.setVisibility(View.VISIBLE);
         }
 
-        tv_count_number.setText("The total number of check in is "+ CheckInDataManager.getCheckIn(db).size());
+        tv_count_number.setText("The total number of check in is " + CheckInDataManager.getCheckIn(db,AppPreference.getPref(getApplicationContext(),AppPreference.CHECK_IN_TYPE)).size());
     }
 
-    private void initEvent(){
+    private void initEvent() {
         btn_view_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),CheckInListActivity.class);
+                Intent intent = new Intent(getApplicationContext(), CheckInListActivity.class);
                 startActivity(intent);
             }
         });
@@ -134,7 +136,7 @@ public class CheckInActivity extends AutoLayoutActivity {
             @Override
             public void onClick(View v) {
                 AppPreference.clearUserPreference(getApplicationContext());
-                Intent intent = new Intent(getApplicationContext(),DeviceLoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), DeviceLoginActivity.class);
                 startActivity(intent);
             }
         });
@@ -155,15 +157,15 @@ public class CheckInActivity extends AutoLayoutActivity {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             byte[] dataId = tag.getId();
             String id = NFCFunction.bytesToHexString(dataId);
-            customerList = CustomerDataManager.getCustomer(db,id);
-            if (customerList.size()>0){
+            customerList = CustomerDataManager.getCustomer(db, id);
+            if (customerList.size() > 0) {
                 customerName = customerList.get(0).name;
                 NFCNumber = id;
                 String time = CommonFunction.getCurrentTime();
                 checkInTime = time;
-                newCheckIn(db, id, time);
+                addNewCheckIn(db, id, time);
                 initData();
-            }else {
+            } else {
                 CommonFunction.showToast(getApplicationContext(), "Invalid Customer", false);
             }
         } catch (Exception e) {
@@ -188,24 +190,29 @@ public class CheckInActivity extends AutoLayoutActivity {
     private void exit() {
         if ((System.currentTimeMillis() - clickTime) > 2000) {
             String toast = "Tap again to exit";
-            CommonFunction.showToast(this,toast,false);
+            CommonFunction.showToast(this, toast, false);
             clickTime = System.currentTimeMillis();
         } else {
             this.finish();
         }
     }
 
-    private void newCheckIn(SQLiteDatabase db, String id, String time) {
-        CheckIn checkIn = new CheckIn(time, id);
-        if (CheckInDataManager.getCheckInByNFCNumber(db, checkIn.NFCNumber).size() == 0) {
+    private void addNewCheckIn(SQLiteDatabase db, String id, String time) {
+        String deviceId = AppPreference.getPref(getApplicationContext(), AppPreference.DEVICE);
+        String typeId = AppPreference.getPref(getApplicationContext(), AppPreference.CHECK_IN_TYPE);
+        String pointId = AppPreference.getPref(getApplicationContext(),AppPreference.CHECK_IN_POINT);
+        CheckIn checkIn = new CheckIn(time, id, deviceId, typeId, pointId);
+        if (CheckInDataManager.getCheckInByNFCNumber(db, checkIn.NFCNumber, typeId).size() == 0) {
             ContentValues cv = new ContentValues();
             cv.put("checkInTime", checkIn.checkInTime);
             cv.put("NFCNumber", checkIn.NFCNumber);
+            cv.put("checkInDeviceId", checkIn.checkInDeviceId);
+            cv.put("checkInTypeId", checkIn.checkInTypeId);
+            cv.put("checkInPointId", checkIn.checkInPointId);
             CheckInDataManager.insertCheckIn(cv, db);
         } else {
             CommonFunction.showToast(getApplicationContext(), "This card has already check in.", false);
-            checkInTime = CheckInDataManager.getCheckInByNFCNumber(db,checkIn.NFCNumber).get(0).checkInTime;
+            checkInTime = CheckInDataManager.getCheckInByNFCNumber(db, checkIn.NFCNumber, typeId).get(0).checkInTime;
         }
     }
-
 }

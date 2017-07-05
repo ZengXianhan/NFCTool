@@ -40,6 +40,68 @@ public class PhotographerDataManager {
         return list;
     }
 
+    public static String getPhotographerId(SQLiteDatabase db, String name){
+        List<Photographer> list = new ArrayList<Photographer>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_PHOTOGRAPHER_NAME);
+        sql.append(" where name = '");
+        sql.append(name);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    Photographer n = new Photographer();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.name = (cursor.getString(cursor.getColumnIndex("name")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        String id = new String();
+        if (list.size()>0){
+            id = list.get(0).id;
+        }
+        return id;
+    }
+
+    public static String getPhotographerName(SQLiteDatabase db, String id){
+        List<Photographer> list = new ArrayList<Photographer>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_PHOTOGRAPHER_NAME);
+        sql.append(" where id = '");
+        sql.append(id);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    Photographer n = new Photographer();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.name = (cursor.getString(cursor.getColumnIndex("name")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        String name = new String();
+        if (list.size()>0){
+            name = list.get(0).name;
+        }
+        return name;
+    }
+
     public synchronized static void downloadPhotographerData(SQLiteDatabase db){
         List<Photographer> list = DummyData.getPhotographerList();
         ContentValues cv = new ContentValues();

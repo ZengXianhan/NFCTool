@@ -9,11 +9,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 
 import com.example.corpit.testnfc.Data.AppPreference;
-import com.example.corpit.testnfc.Data.DummyData;
 import com.example.corpit.testnfc.Data.MyDatabaseHelper;
 import com.example.corpit.testnfc.DataManager.CheckInPointDataManager;
 import com.example.corpit.testnfc.DataManager.CheckInTypeDataManager;
@@ -34,7 +32,7 @@ import java.util.List;
  * Created by corpit on 29/6/2017.
  */
 
-public class DeviceLoginActivity extends AutoLayoutActivity{
+public class DeviceLoginActivity extends AutoLayoutActivity {
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -52,10 +50,10 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
     private long clickTime = 0; // 第一次点击的时间
 
     private String selectedDevice = new String();
-    private String selectedFeature= new String();
+    private String selectedFeature = new String();
     private String selectedType = new String();
-    private String selectedPoint= new String();
-    private String selectedPhotographer= new String();
+    private String selectedPoint = new String();
+    private String selectedPhotographer = new String();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,7 +78,7 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
         super.onResume();
     }
 
-    private void initView(){
+    private void initView() {
         rl_check_in_option = (RelativeLayout) findViewById(R.id.rl_check_in_option);
         rl_photo_option = (RelativeLayout) findViewById(R.id.rl_photo_option);
         sp_login_device = (Spinner) findViewById(R.id.sp_login_device);
@@ -90,65 +88,64 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
         sp_photographer = (Spinner) findViewById(R.id.sp_photographer);
         btn_enter = (Button) findViewById(R.id.btn_login_enter);
 
-        if (selectedFeature.contains("Check In")){
+        if (selectedFeature.contains("Check In")) {
             rl_check_in_option.setVisibility(View.VISIBLE);
             rl_photo_option.setVisibility(View.GONE);
-        }else if (selectedFeature.contains("Taking Photo")){
+        } else if (selectedFeature.contains("Taking Photo")) {
             rl_check_in_option.setVisibility(View.GONE);
             rl_photo_option.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             rl_check_in_option.setVisibility(View.VISIBLE);
             rl_photo_option.setVisibility(View.GONE);
         }
     }
 
-    private void initData(){
-        ArrayAdapter adapter = new ArrayAdapter(this,android.R.layout.simple_expandable_list_item_1,
+    private void initData() {
+        ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 getDeviceData(db));
         sp_login_device.setAdapter(adapter);
-        ArrayAdapter adapter2 = new ArrayAdapter(this,android.R.layout.simple_expandable_list_item_1,
+        ArrayAdapter adapter2 = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 getFeatureData());
         sp_login_feature.setAdapter(adapter2);
-        ArrayAdapter adapter3 = new ArrayAdapter(this,android.R.layout.simple_expandable_list_item_1,
+        ArrayAdapter adapter3 = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 getCheckInTypeData(db));
         sp_login_check_in_type.setAdapter(adapter3);
-        adapter4 = new ArrayAdapter(this,android.R.layout.simple_expandable_list_item_1,
-                getCheckInPointData(db,selectedType));
+        adapter4 = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
+                getCheckInPointData(db, selectedType));
         sp_login_check_in_point.setAdapter(adapter4);
-        adapter5 = new ArrayAdapter(this,android.R.layout.simple_expandable_list_item_1,
+        adapter5 = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
                 getPhotographerData(db));
         sp_photographer.setAdapter(adapter5);
     }
 
-    private void updateAdapter(){
-        adapter4 = new ArrayAdapter(this,android.R.layout.simple_expandable_list_item_1,
-                getCheckInPointData(db,selectedType));
+    private void updateAdapter() {
+        adapter4 = new ArrayAdapter(this, android.R.layout.simple_expandable_list_item_1,
+                getCheckInPointData(db, selectedType));
         sp_login_check_in_point.setAdapter(adapter4);
     }
 
-    private void initEvent(){
+    private void initEvent() {
         btn_enter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AppPreference.updatePref(getApplicationContext(),AppPreference.DEVICE,selectedDevice);
-                AppPreference.updatePref(getApplicationContext(),AppPreference.FEATURE,selectedFeature);
+                AppPreference.updatePref(getApplicationContext(), AppPreference.DEVICE, DeviceDataManager.getDeviceId(db, selectedDevice));
+                AppPreference.updatePref(getApplicationContext(), AppPreference.FEATURE, selectedFeature);
                 Intent intent = new Intent();
-                switch(selectedFeature)
-                {
+                switch (selectedFeature) {
                     case "Check In":
-                        AppPreference.updatePref(getApplicationContext(),AppPreference.CHECK_IN_TYPE,selectedType);
-                        AppPreference.updatePref(getApplicationContext(),AppPreference.CHECK_IN_POINT,selectedPoint);
-                        if (selectedType.contains("Hotel")){
-                            intent = new Intent(getApplicationContext(),CheckInActivity.class);
-                        }else if (selectedType.contains("Gala")){
-                            intent = new Intent(getApplicationContext(),CheckInActivity.class);
-                        }else if (selectedType.contains("Drive")){
-                            intent = new Intent(getApplicationContext(),CheckInActivity.class);
+                        AppPreference.updatePref(getApplicationContext(), AppPreference.CHECK_IN_TYPE, CheckInTypeDataManager.getCheckInTypeId(db, selectedType));
+                        AppPreference.updatePref(getApplicationContext(), AppPreference.CHECK_IN_POINT, CheckInPointDataManager.getCheckInPointId(db, selectedPoint));
+                        if (selectedType.contains("Hotel")) {
+                            intent = new Intent(getApplicationContext(), CheckInActivity.class);
+                        } else if (selectedType.contains("Gala")) {
+                            intent = new Intent(getApplicationContext(), CheckInActivity.class);
+                        } else if (selectedType.contains("Drive")) {
+                            intent = new Intent(getApplicationContext(), CheckInActivity.class);
                         }
                         break;
                     case "Taking Photo":
-                        AppPreference.updatePref(getApplicationContext(),AppPreference.PHOTOGRAPHER,selectedPhotographer);
-                        intent = new Intent(getApplicationContext(),CheckInActivity.class);
+                        AppPreference.updatePref(getApplicationContext(), AppPreference.PHOTOGRAPHER, selectedPhotographer);
+                        intent = new Intent(getApplicationContext(), CheckInActivity.class);
                         break;
                 }
                 startActivity(intent);
@@ -197,13 +194,13 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
         sp_login_check_in_point.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedPoint = getCheckInPointData(db,selectedType).get(position);
+                selectedPoint = getCheckInPointData(db, selectedType).get(position);
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                selectedPoint = getCheckInPointData(db,selectedType).get(0);
+                selectedPoint = getCheckInPointData(db, selectedType).get(0);
 
             }
         });
@@ -230,17 +227,17 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
     private void exit() {
         if ((System.currentTimeMillis() - clickTime) > 2000) {
             String toast = "再按一次后退键退出程序";
-            CommonFunction.showToast(this,toast,false);
+            CommonFunction.showToast(this, toast, false);
             clickTime = System.currentTimeMillis();
         } else {
             this.finish();
         }
     }
 
-    private ArrayList<String> getDeviceData(SQLiteDatabase db){
+    private ArrayList<String> getDeviceData(SQLiteDatabase db) {
         ArrayList<String> data = new ArrayList<>();
         List<Device> list = DeviceDataManager.getDevice(db);
-        if (list.size()>0){
+        if (list.size() > 0) {
             for (Device d :
                     list) {
                 data.add(d.deviceName);
@@ -249,17 +246,17 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
         return data;
     }
 
-    private ArrayList<String> getFeatureData(){
+    private ArrayList<String> getFeatureData() {
         ArrayList<String> data = new ArrayList<>();
         data.add("Check In");
         data.add("Taking Photo");
         return data;
     }
 
-    private ArrayList<String> getCheckInTypeData(SQLiteDatabase db){
+    private ArrayList<String> getCheckInTypeData(SQLiteDatabase db) {
         ArrayList<String> data = new ArrayList<>();
         List<CheckInType> list = CheckInTypeDataManager.getCheckInType(db);
-        if (list.size()>0){
+        if (list.size() > 0) {
             for (CheckInType d :
                     list) {
                 data.add(d.typeName);
@@ -268,15 +265,11 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
         return data;
     }
 
-    private ArrayList<String> getCheckInPointData(SQLiteDatabase db,String checkInTypeName){
-        List<CheckInType> checkInTypes = CheckInTypeDataManager.getCheckInType(db,checkInTypeName);
-        String checkInTypeId = new String();
-        if (checkInTypes.size()>0){
-            checkInTypeId = checkInTypes.get(0).id;
-        }
+    private ArrayList<String> getCheckInPointData(SQLiteDatabase db, String checkInTypeName) {
+        String checkInTypeId = CheckInTypeDataManager.getCheckInTypeId(db, checkInTypeName);
         ArrayList<String> data = new ArrayList<>();
-        List<CheckInPoint> list = CheckInPointDataManager.getCheckInPoint(db,checkInTypeId);
-        if (list.size()>0){
+        List<CheckInPoint> list = CheckInPointDataManager.getCheckInPoint(db, checkInTypeId);
+        if (list.size() > 0) {
             for (CheckInPoint d :
                     list) {
                 data.add(d.pointName);
@@ -285,10 +278,10 @@ public class DeviceLoginActivity extends AutoLayoutActivity{
         return data;
     }
 
-    private ArrayList<String> getPhotographerData(SQLiteDatabase db){
+    private ArrayList<String> getPhotographerData(SQLiteDatabase db) {
         ArrayList<String> data = new ArrayList<>();
         List<Photographer> list = PhotographerDataManager.getPhotographer(db);
-        if (list.size()>0){
+        if (list.size() > 0) {
             for (Photographer d :
                     list) {
                 data.add(d.name);

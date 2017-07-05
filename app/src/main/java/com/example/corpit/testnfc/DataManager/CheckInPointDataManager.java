@@ -69,6 +69,70 @@ public class CheckInPointDataManager {
         return list;
     }
 
+    public static String getCheckInPointId(SQLiteDatabase db,String checkIntPointName){
+        List<CheckInPoint> list = new ArrayList<CheckInPoint>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_CHECK_IN_POINT_NAME);
+        sql.append(" where pointName = '");
+        sql.append(checkIntPointName);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    CheckInPoint n = new CheckInPoint();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.pointName = (cursor.getString(cursor.getColumnIndex("pointName")));
+                    n.checkInTypeId = (cursor.getString(cursor.getColumnIndex("checkInTypeId")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        String checkInPointId = "";
+        if (list.size()>0){
+            checkInPointId = list.get(0).id;
+        }
+        return checkInPointId;
+    }
+
+    public static String getCheckInPointName(SQLiteDatabase db,String id){
+        List<CheckInPoint> list = new ArrayList<CheckInPoint>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_CHECK_IN_POINT_NAME);
+        sql.append(" where id = '");
+        sql.append(id);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    CheckInPoint n = new CheckInPoint();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.pointName = (cursor.getString(cursor.getColumnIndex("pointName")));
+                    n.checkInTypeId = (cursor.getString(cursor.getColumnIndex("checkInTypeId")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+        String pointName = "";
+        if (list.size()>0){
+            pointName = list.get(0).pointName;
+        }
+        return pointName;
+    }
+
     public synchronized static void downloadCheckInPointData(SQLiteDatabase db){
         List<CheckInPoint> list = DummyData.getCheckInPointList();
         ContentValues cv = new ContentValues();

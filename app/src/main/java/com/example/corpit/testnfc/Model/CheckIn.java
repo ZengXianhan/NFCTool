@@ -5,10 +5,12 @@ package com.example.corpit.testnfc.Model;
  */
 
 public class CheckIn {
-    public CheckIn(String id, String checkInTime, String NFCNumber) {
-        this.id = id;
+    public CheckIn(String checkInTime, String NFCNumber,String checkInDeviceId,String checkInTypeId,String checkInPointId) {
         this.checkInTime = checkInTime;
         this.NFCNumber = NFCNumber;
+        this.checkInDeviceId = checkInDeviceId;
+        this.checkInTypeId = checkInTypeId;
+        this.checkInPointId = checkInPointId;
     }
 
     public CheckIn() {

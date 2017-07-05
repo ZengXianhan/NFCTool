@@ -18,10 +18,10 @@ import java.util.List;
 public class DummyData {
     public static List<CheckIn> getCheckInInfoList(){
         List<CheckIn> dummyInfo = new ArrayList<>();
-        dummyInfo.add(new CheckIn(null,"20170307","53:01:00:02:03:0B:21"));
-        dummyInfo.add(new CheckIn(null,"20170308","53:01:00:02:03:0B:1E"));
-        dummyInfo.add(new CheckIn(null,"20170309","53:01:00:02:03:0B:1F"));
-        dummyInfo.add(new CheckIn(null,"20170310","53:01:00:02:03:0B:25"));
+//        dummyInfo.add(new CheckIn(null,"20170307","53:01:00:02:03:0B:21"));
+//        dummyInfo.add(new CheckIn(null,"20170308","53:01:00:02:03:0B:1E"));
+//        dummyInfo.add(new CheckIn(null,"20170309","53:01:00:02:03:0B:1F"));
+//        dummyInfo.add(new CheckIn(null,"20170310","53:01:00:02:03:0B:25"));
         return dummyInfo;
     }
 

@@ -1,22 +1,18 @@
 package com.example.corpit.testnfc.Activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import com.example.corpit.testnfc.Data.AppPreference;
-import com.example.corpit.testnfc.Data.DatabaseConstants;
 import com.example.corpit.testnfc.Data.MyDatabaseHelper;
 import com.example.corpit.testnfc.DataManager.CheckInPointDataManager;
 import com.example.corpit.testnfc.DataManager.CheckInTypeDataManager;
 import com.example.corpit.testnfc.DataManager.CustomerDataManager;
 import com.example.corpit.testnfc.DataManager.DeviceDataManager;
 import com.example.corpit.testnfc.DataManager.PhotographerDataManager;
-import com.example.corpit.testnfc.Model.Photographer;
 import com.example.corpit.testnfc.R;
 import com.example.corpit.testnfc.Util.CommonFunction;
 

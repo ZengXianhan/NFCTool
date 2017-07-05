@@ -40,7 +40,7 @@ public class CheckInTypeDataManager {
         return list;
     }
 
-    public static List<CheckInType> getCheckInType(SQLiteDatabase db,String typeName){
+    public static String getCheckInTypeId(SQLiteDatabase db,String typeName){
         List<CheckInType> list = new ArrayList<CheckInType>();
         StringBuffer sql = new StringBuffer();
         sql.append("select * from "+ DatabaseConstants.TABLE_CHECK_IN_TYPE_NAME);
@@ -64,7 +64,44 @@ public class CheckInTypeDataManager {
             // TODO: handle exception
             e.printStackTrace();
         }
-        return list;
+
+        String checkInTypeId = "";
+        if (list.size()>0){
+            checkInTypeId = list.get(0).id;
+        }
+        return checkInTypeId;
+    }
+
+    public static String getCheckInTypeName(SQLiteDatabase db,String id){
+        List<CheckInType> list = new ArrayList<CheckInType>();
+        StringBuffer sql = new StringBuffer();
+        sql.append("select * from "+ DatabaseConstants.TABLE_CHECK_IN_TYPE_NAME);
+        sql.append(" where id = '");
+        sql.append(id);
+        sql.append("'");
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql.toString(), null);
+            if (cursor.moveToFirst()) {
+                int cursorCount = cursor.getCount();
+                for (int i = 0; i < cursorCount; i++) {
+                    CheckInType n = new CheckInType();
+                    n.id = (cursor.getString(cursor.getColumnIndex("id")));
+                    n.typeName = (cursor.getString(cursor.getColumnIndex("typeName")));
+                    list.add(n);
+                    cursor.moveToNext();
+                }
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
+
+        String typeName = "";
+        if (list.size()>0){
+            typeName = list.get(0).typeName;
+        }
+        return typeName;
     }
 
     public synchronized static void downloadCheckInTypeData(SQLiteDatabase db){

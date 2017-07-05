@@ -15,7 +15,7 @@
         android:textColor="@color/black"
         android:gravity="center"
         android:layout_marginTop="30px"
-        android:textSize="30px"
+        android:textSize="40px"
         android:layout_below="@+id/layout_titlebar"/>
 
     <TextView
@@ -26,7 +26,7 @@
         android:gravity="center"
         android:layout_below="@+id/tv_customer_id"
         android:layout_marginTop="30px"
-        android:textSize="30px"/>
+        android:textSize="40px"/>
 
     <TextView
         android:id="@+id/tv_customer_time"
@@ -36,24 +36,26 @@
         android:gravity="center"
         android:layout_below="@+id/tv_customer_name"
         android:layout_marginTop="30px"
-        android:textSize="30px"/>
+        android:textSize="40px"/>
 
     <TextView
         android:id="@+id/tv_count_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
-        android:layout_marginTop="700px"
-        android:textSize="20px"
+        android:layout_above="@+id/btn_view_list"
+        android:textSize="40px"
         android:gravity="center"/>
 
     <Button
         android:id="@+id/btn_view_list"
-        android:layout_width="400px"
+        android:layout_width="match_parent"
         android:layout_height="100px"
+        android:layout_alignParentBottom="true"
         android:text="View Check In List"
-        android:layout_below="@+id/tv_count_number"
         android:layout_marginTop="30px"
-        android:layout_centerHorizontal="true"/>
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:background="@color/slategray"/>
 
 </RelativeLayout>
